@@ -1,54 +1,100 @@
-#pragma once
-#include "../../source engine/sdk.hpp"
+/*
+[PREDITLE]
 
-namespace jump_stats
-{
-	// { {left, right}, {incremented_left, incremented_right} }
-	using strafes_t = std::pair<std::pair<int, int>, std::pair<bool, bool>>;
+Jumpshot, p100, millionware on top
+Awp don't need no scope, hop around don't miss a shot
+7 shots in my deagle always got me lookin' evil
+p100 like it's cheat-codes just need one shot never reload
 
-	inline struct
-	{
-		int m_predicted_flags;
-		int m_unpredicted_flags;
+I hit the edgebug jumpbug spin around and flickshot (ooh)
+Didn't even see you but your skull's eating my AWP shots (ahaheahey)
+I hop through vent and spin around you didn't even see me there
+It's 'cause I'm rich and flexing jumping around with my millionware
 
-		bool m_bhopped;
-		bool m_bhopping;
-		bool m_jump_bugged;
-		bool m_was_in_air;
-		bool m_fell_too_much;
-		bool m_jumped_too_high;
+[DNZ]
 
-		int m_previous_strafes;
-		int m_last_tick_on_ground;
-		int m_last_tick_in_air;
-		int m_consecutive_ticks_on_ground;
-		int m_consecutive_ticks_in_air;
+I'm in the sky going high
+Counting seconds in the air
+Catch me if you can
+bouncing like a frogman
+It's 778 hopping 'round with 108
+I don't stand around and wait
+Jumpbug and accelerate
 
-		float m_last_strafe_increment;
+[SONAR]
 
-		strafes_t m_successful_strafes;
-		strafes_t m_attempted_strafes;
+Marijuana movement trail
+Hip got locked up, county jail
+Sold an invite paid for bail
+You be moving like a snail
+interium n***as bought a rat
+paid my way into nohat
+you're a nothing copycat
+f**king noname acrobat
 
-		int m_total_successful_strafes;
-		int m_total_attempted_strafes;
+khmora gave me three day ban
+bhopper from pakistan
+blow it up, no taliban
+You wannabes are hexa stans
 
-		int m_take_off_velocity;
-		int m_highest_velocity;
+UID 165
+Drain Gang always sleep-deprived
+Autostrafing cat-to-chair
+Serversiding, millionware
 
-		int m_strafe_sync;
+[STELLAR]
 
-		vec3 m_take_off_pos;
-		vec3 m_landed_pos;
+Hotwheels sucks gonna breakaway
+Spinning on mirage (yeah)
+Hit you with the 1-tap AK
+Now you all applause (yuh)
 
-		float m_long_jump;
-	} stat_info;
+Free Clifton he didn't do sh*t
+All the money it's counterfeit
+Never missed bench to bricks
+Swerving around 64-tick
+[CHORUS/PREDITLE]
 
-	void update_unpredicted_info( int flags );
-	void update_predicted_info( int flags );
+Jumpshot, p100, millionware on top
+Awp don't need no scope, hop around don't miss a shot
+7 shots in my deagle always got me lookin' evil
+p100 like it's cheat-codes just need one shot never reload
 
-	void update_info( c_usercmd* cmd );
+I hit the edgebug jumpbug spin around and flickshot (ooh)
+Didn't even see you but your skull's eating my AWP shots (ahaheahey)
+I hop through vent and spin around you didn't even see me there
+It's 'cause I'm rich and flexing jumping around with my millionware
 
-	const char* get_color_by_distance( float lj );
+[STELLAR]
 
-	void announce( float lj, bool jb = false );
-}
+They just added in-game chat
+All these n***as got my back
+Getting banned like every day
+Message aiden, back in black
+
+Hitting edgebugs de_nuke
+Leaving discord call me duxe
+Your strafes are dog, make me puke
+My Fake Backward got you juked
+
+Sold a paste, call me woke
+f**ked your momma in the throat
+Your movement is a f**king joke
+Kill yourself retarded bloke
+Daily dose of estrogen
+No autostrafe I'm genuine
+Jumping shot; adrenaline
+OneShot turned me feminine
+
+[AIDEN]
+
+Knife behind; HNS
+Tracing you like GPS
+I check you like it's chess
+I see Brooke, she undress (I see Brooke, she undress)
+
+Like breezetix, don't need to hear
+Sound ESP, know when you're near
+Bounce off your head, I disappear
+I made that one jumpbug tutorial (do you guys remember that?)
+*/

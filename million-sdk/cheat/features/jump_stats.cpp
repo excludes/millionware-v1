@@ -1,314 +1,102 @@
-#include "jump_stats.hpp"
+// removed for aidens reputation lmfao
 
-#include "pred.hpp"
-#include "../input/input.hpp"
+/*
+[PREDITLE]
 
-#include "../renderer/renderer.hpp"
-#include "../../source engine/math/point.hpp"
+Jumpshot, p100, millionware on top
+Awp don't need no scope, hop around don't miss a shot
+7 shots in my deagle always got me lookin' evil
+p100 like it's cheat-codes just need one shot never reload
 
-#include "../../engine/utilities/config.hpp"
+I hit the edgebug jumpbug spin around and flickshot (ooh)
+Didn't even see you but your skull's eating my AWP shots (ahaheahey)
+I hop through vent and spin around you didn't even see me there
+It's 'cause I'm rich and flexing jumping around with my millionware
 
-#include "movement.hpp"
+[DNZ]
 
-void jump_stats::update_unpredicted_info( int flags )
-{
-	stat_info.m_unpredicted_flags = flags;
-}
+I'm in the sky going high
+Counting seconds in the air
+Catch me if you can
+bouncing like a frogman
+It's 778 hopping 'round with 108
+I don't stand around and wait
+Jumpbug and accelerate
 
-void jump_stats::update_predicted_info( int flags )
-{
-	stat_info.m_predicted_flags = flags;
-}
+[SONAR]
 
-void jump_stats::update_info( c_usercmd* cmd )
-{
-	if ( !*config::get<bool>( crc( "misc:jumpstats" ) ) )
-	{
-		return;
-	}
+Marijuana movement trail
+Hip got locked up, county jail
+Sold an invite paid for bail
+You be moving like a snail
+interium n***as bought a rat
+paid my way into nohat
+you're a nothing copycat
+f**king noname acrobat
 
-	player_t* local = interfaces::entity_list->get<player_t>( interfaces::engine->get_local_player( ) );
-	if ( !local || !cmd )
-	{
-		return;
-	}
+khmora gave me three day ban
+bhopper from pakistan
+blow it up, no taliban
+You wannabes are hexa stans
 
-	// unpredicted player's flags are 1 tick behind
-	stat_info.m_bhopped = ( stat_info.m_unpredicted_flags & fl_onground ) && !( stat_info.m_predicted_flags & fl_onground );
-	stat_info.m_bhopping = stat_info.m_consecutive_ticks_in_air > 0;
+UID 165
+Drain Gang always sleep-deprived
+Autostrafing cat-to-chair
+Serversiding, millionware
 
-	if ( stat_info.m_predicted_flags & fl_onground )
-	{
-		stat_info.m_last_tick_on_ground = interfaces::globals->tick_count;
-	}
-	else
-	{
-		stat_info.m_last_tick_in_air = interfaces::globals->tick_count;
-	}
+[STELLAR]
 
-	if ( stat_info.m_predicted_flags & fl_onground )
-	{
-		stat_info.m_consecutive_ticks_on_ground++;
-		if ( stat_info.m_consecutive_ticks_on_ground > 1 )
-		{
-			stat_info.m_consecutive_ticks_in_air = 0;
-		}
-	}
-	else
-	{
-		stat_info.m_consecutive_ticks_in_air++;
-		stat_info.m_consecutive_ticks_on_ground = 0;
-	}
+Hotwheels sucks gonna breakaway
+Spinning on mirage (yeah)
+Hit you with the 1-tap AK
+Now you all applause (yuh)
 
-	stat_info.m_was_in_air = stat_info.m_consecutive_ticks_on_ground > 1 && ( ( stat_info.m_last_tick_on_ground > stat_info.m_last_tick_in_air + 1 ) && ( stat_info.m_last_tick_on_ground - stat_info.m_last_tick_in_air ) < 25 )
-		&& stat_info.m_last_tick_in_air > 0;
+Free Clifton he didn't do sh*t
+All the money it's counterfeit
+Never missed bench to bricks
+Swerving around 64-tick
+[CHORUS/PREDITLE]
 
-	if ( stat_info.m_bhopping )
-	{
-		stat_info.m_highest_velocity = max( local->velocity( ).length_2d( ), stat_info.m_highest_velocity );
-	}
+Jumpshot, p100, millionware on top
+Awp don't need no scope, hop around don't miss a shot
+7 shots in my deagle always got me lookin' evil
+p100 like it's cheat-codes just need one shot never reload
 
-	if ( stat_info.m_was_in_air )
-	{
-		if ( ( stat_info.m_predicted_flags & fl_onground ) && stat_info.m_consecutive_ticks_on_ground < 3 )
-		{
-			stat_info.m_landed_pos = local->abs_origin( );
-			stat_info.m_long_jump = fabs( ( stat_info.m_landed_pos - stat_info.m_take_off_pos ).length_2d( ) );
-			announce( stat_info.m_long_jump );
-		}
-	}
-	else if ( !stat_info.m_was_in_air && ( stat_info.m_predicted_flags & fl_onground ) && stat_info.m_consecutive_ticks_on_ground > 1 || stat_info.m_jump_bugged )
-	{
-		stat_info.m_take_off_velocity = local->velocity( ).length_2d( );
-		stat_info.m_take_off_pos = local->abs_origin( );
-		stat_info.m_landed_pos = vec3( 0, 0, 0 );
-		stat_info.m_long_jump = 0.f;
-		stat_info.m_highest_velocity = 0;
-	}
+I hit the edgebug jumpbug spin around and flickshot (ooh)
+Didn't even see you but your skull's eating my AWP shots (ahaheahey)
+I hop through vent and spin around you didn't even see me there
+It's 'cause I'm rich and flexing jumping around with my millionware
 
-	stat_info.m_fell_too_much = ( stat_info.m_take_off_pos.z - stat_info.m_landed_pos.z ) > 18.01f && !( stat_info.m_predicted_flags & fl_ducking ) && !( stat_info.m_unpredicted_flags & fl_ducking );
-	/*stat_info.m_jump_bugged = movement::jumpbugged && stat_info.m_consecutive_ticks_in_air != 0;
+[STELLAR]
 
-	if ( stat_info.m_jump_bugged ) {
-		announce( 0.f, true );
-	}*/
+They just added in-game chat
+All these n***as got my back
+Getting banned like every day
+Message aiden, back in black
 
-	if ( stat_info.m_bhopping && stat_info.m_bhopped || stat_info.m_jump_bugged )
-	{
-		stat_info.m_take_off_velocity = local->velocity( ).length_2d( );
-		stat_info.m_take_off_pos = local->abs_origin( );
-		stat_info.m_landed_pos = vec3( 0, 0, 0 );
-		stat_info.m_long_jump = 0.f;
-		stat_info.m_highest_velocity = 0;
-	}
+Hitting edgebugs de_nuke
+Leaving discord call me duxe
+Your strafes are dog, make me puke
+My Fake Backward got you juked
 
-	if ( stat_info.m_consecutive_ticks_on_ground > 1 )
-	{
-		stat_info.m_take_off_pos = local->abs_origin( );
-		stat_info.m_landed_pos = vec3( 0, 0, 0 );
-		stat_info.m_long_jump = 0.f;
-		stat_info.m_highest_velocity = 0;
-	}
+Sold a paste, call me woke
+f**ked your momma in the throat
+Your movement is a f**king joke
+Kill yourself retarded bloke
+Daily dose of estrogen
+No autostrafe I'm genuine
+Jumping shot; adrenaline
+OneShot turned me feminine
 
-	if ( ( stat_info.m_predicted_flags & fl_onground ) )
-	{
+[AIDEN]
 
-		// successful
-		stat_info.m_successful_strafes.first.first = 0; // left strafes
-		stat_info.m_successful_strafes.second.first = false;
+Knife behind; HNS
+Tracing you like GPS
+I check you like it's chess
+I see Brooke, she undress (I see Brooke, she undress)
 
-		stat_info.m_successful_strafes.first.second = 0;// right strafes
-		stat_info.m_successful_strafes.second.second = false;
-
-		// total
-		stat_info.m_attempted_strafes.first.first = 0; // left strafes
-		stat_info.m_attempted_strafes.second.first = false;
-
-		stat_info.m_attempted_strafes.first.second = 0;// right strafes
-		stat_info.m_attempted_strafes.second.second = false;
-		return;
-	}
-
-	// can't strafe cos you're holding down both A and D
-	if ( !( ( cmd->buttons & in_moveleft ) && ( cmd->buttons & in_moveright ) ) )
-	{
-		// tried to strafe
-		if ( ( cmd->buttons & in_moveleft ) && !stat_info.m_attempted_strafes.second.first )
-		{
-			stat_info.m_attempted_strafes.first.first += 1;
-		}
-
-		if ( ( cmd->buttons & in_moveright ) && !stat_info.m_attempted_strafes.second.second )
-		{
-			stat_info.m_attempted_strafes.first.second += 1;
-		}
-	}
-
-	// managed to sync the left strafe
-	if ( cmd->mouse_dx < 0 )
-	{
-		if ( ( cmd->buttons & in_moveleft ) && !stat_info.m_successful_strafes.second.first )
-		{
-			stat_info.m_successful_strafes.first.first += 1;
-		}
-	}
-	// managed to sync the right strafe
-	else if ( cmd->mouse_dx > 0 )
-	{
-		if ( ( cmd->buttons & in_moveright ) && !stat_info.m_successful_strafes.second.second )
-		{
-			stat_info.m_successful_strafes.first.second += 1;
-		}
-	}
-
-	static int old_successful_left_strafes = stat_info.m_successful_strafes.first.first;
-	static int old_successful_right_strafes = stat_info.m_successful_strafes.first.second;
-
-	if ( old_successful_left_strafes != stat_info.m_successful_strafes.first.first )
-	{
-		// already incremented left strafes, don't do it again!
-		stat_info.m_successful_strafes.second.first = true;
-		stat_info.m_successful_strafes.second.second = false;
-
-		stat_info.m_last_strafe_increment = interfaces::globals->cur_time;
-
-		old_successful_left_strafes = stat_info.m_successful_strafes.first.first;
-	}
-
-	if ( old_successful_right_strafes != stat_info.m_successful_strafes.first.second )
-	{
-		// already incremented right strafes, don't do it again!
-		stat_info.m_successful_strafes.second.second = true;
-		stat_info.m_successful_strafes.second.first = false;
-
-		stat_info.m_last_strafe_increment = interfaces::globals->cur_time;
-
-		old_successful_right_strafes = stat_info.m_successful_strafes.first.second;
-	}
-
-	static int old_failed_left_strafes = stat_info.m_attempted_strafes.first.first;
-	static int old_failed_right_strafes = stat_info.m_attempted_strafes.first.second;
-
-	if ( old_failed_left_strafes != stat_info.m_attempted_strafes.first.first )
-	{
-		// already incremented left strafes, don't do it again!
-		stat_info.m_attempted_strafes.second.first = true;
-		stat_info.m_attempted_strafes.second.second = false;
-
-		stat_info.m_last_strafe_increment = interfaces::globals->cur_time;
-
-		old_failed_left_strafes = stat_info.m_attempted_strafes.first.first;
-	}
-
-	if ( old_failed_right_strafes != stat_info.m_attempted_strafes.first.second )
-	{
-		// already incremented right strafes, don't do it again!
-		stat_info.m_attempted_strafes.second.second = true;
-		stat_info.m_attempted_strafes.second.first = false;
-
-		stat_info.m_last_strafe_increment = interfaces::globals->cur_time;
-
-		old_failed_right_strafes = stat_info.m_attempted_strafes.first.second;
-	}
-
-	if ( fabs( interfaces::globals->cur_time - stat_info.m_last_strafe_increment ) > 0.4f )
-	{
-		// successful
-		stat_info.m_successful_strafes.first.first = 0; // left strafes
-		stat_info.m_successful_strafes.second.first = false;
-
-		stat_info.m_successful_strafes.first.second = 0;// right strafes
-		stat_info.m_successful_strafes.second.second = false;
-
-		// total
-		stat_info.m_attempted_strafes.first.first = 0; // left strafes
-		stat_info.m_attempted_strafes.second.first = false;
-
-		stat_info.m_attempted_strafes.first.second = 0;// right strafes
-		stat_info.m_attempted_strafes.second.second = false;
-	}
-
-	stat_info.m_total_successful_strafes = stat_info.m_successful_strafes.first.first + stat_info.m_successful_strafes.first.second;
-	stat_info.m_total_attempted_strafes = stat_info.m_attempted_strafes.first.first + stat_info.m_attempted_strafes.first.second;
-}
-
-const char* jump_stats::get_color_by_distance( float lj )
-{
-	if ( lj <= 210.f )
-	{
-		return ( "\x08" );
-	}
-	else if ( lj > 210.f && lj <= 230.f )
-	{
-		return ( "\x04" );
-	}
-	else if ( lj > 230.f && lj <= 235.f )
-	{
-		return ( "\x0C" );
-	}
-	else if ( lj > 235.f && lj <= 240.f )
-	{
-		return ( "\x02" );
-	}
-	else if ( lj > 240.f && lj >= 245.0f )
-	{
-		return ( "\x09" );
-	}
-}
-
-void jump_stats::announce( float lj, bool jb )
-{
-	if ( !*config::get<bool>( crc( "misc:jumpstats" ) ) )
-	{
-		return;
-	}
-
-	float sync = float( stat_info.m_total_attempted_strafes == 0 ? 0.f : ( ( float )stat_info.m_total_successful_strafes / ( float )stat_info.m_total_attempted_strafes ) * 100.f );
-
-	if ( jb || lj >= 255.f )
-	{
-		static bool announced = false;
-		static float last_announced = interfaces::globals->tick_count;
-
-		if ( !announced )
-		{
-			interfaces::hud_chat->chat_print( xor ( "[" "\x0C" "millionware" "\x01" "]" "\x08" " jump failed [" "\x02" "jump bug" "\x08" "]" ) );
-			last_announced = interfaces::globals->tick_count;
-			announced = true;
-		}
-
-		if ( interfaces::globals->tick_count - last_announced > 5 )
-		{
-			announced = false;
-		}
-	}
-	else if ( sync == 0 || stat_info.m_total_successful_strafes == 0 && lj > 100.f )
-	{
-		static bool announced = false;
-		static float last_announced = interfaces::globals->tick_count;
-
-		if ( !announced )
-		{
-			interfaces::hud_chat->chat_print( xor ( "[" "\x0C" "millionware" "\x01" "]" "\x08" " jump failed [" "\x02" "invalid" "\x08" "]" ) );
-			last_announced = interfaces::globals->tick_count;
-			announced = true;
-		}
-
-		if ( interfaces::globals->tick_count - last_announced > 5 )
-		{
-			announced = false;
-		}
-	}
-	else
-	{
-		// gay
-		char percent[ 5 ];
-		strcpy( percent, "%%" );
-
-		if ( lj >= 180.f )
-		{
-			interfaces::hud_chat->chat_print( xor ( "[" "\x0C" "millionware" "\x01" "]" "%s" " LJ: %.2f units " "\x08" "[" "\x06" "%i " "\x08" "strafes | " "\x06" "%i " "\x08" "pre | " "\x06" "%i " "\x08" "max | " "\x06" "%.f%s " "\x08" "sync]" ),
-											  get_color_by_distance( lj ), lj, stat_info.m_total_successful_strafes, stat_info.m_take_off_velocity, stat_info.m_highest_velocity, sync, percent );
-		}
-	}
-}
+Like breezetix, don't need to hear
+Sound ESP, know when you're near
+Bounce off your head, I disappear
+I made that one jumpbug tutorial (do you guys remember that?)
+*/
